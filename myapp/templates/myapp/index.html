@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Notifications example</title>
+</head>
+<body>
+	{% if is_user_authenticated %}
+		<a href="/logout/?next={{path}}">Logout</a>
+		<a href="{% url 'myapp:notify' %}"><h4>Send_notification</h4></a>
+		{% if unread_notifications|length > 0 %}
+			Unread notifications:
+			{% for unread_notification in unread_notifications %}
+				<p><strong>{{ unread_notification.verb }}</strong> <a href="{% url 'myapp:read' unread_notification.id %}">Mark as read</a></p>
+			{% endfor %}
+		{% else %}
+			No unread notifications
+		{% endif %}
+	{% else %}
+		<form action="." method="POST">
+			{% csrf_token %}
+			username: <input type="text" name="username">
+			password: <input type="text" name="password">
+			<input type="submit" value="Log in">
+		</form>
+	{% endif %}
+		
+</body>
+</html>
